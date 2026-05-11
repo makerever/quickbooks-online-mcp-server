@@ -2,11 +2,13 @@ FROM node:22-alpine AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# --ignore-scripts: the `prepare` hook runs `npm run build`, but tsconfig.json
+# and src/ aren't here yet. We run the build explicitly below.
+RUN npm ci --ignore-scripts
 
 COPY tsconfig.json tsconfig.test.json ./
 COPY src ./src
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npm prune --omit=dev --ignore-scripts
 
 FROM node:22-alpine AS runtime
 WORKDIR /app
