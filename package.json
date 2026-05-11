@@ -15,30 +15,35 @@
         "watch": "tsc --watch",
         "lint:fix": "eslint --fix",
         "lint": "eslint .",
-        "auth": "node dist/auth-server.js",
+        "start": "node dist/index.js",
         "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
         "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
         "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage"
     },
+    "engines": {
+        "node": ">=20"
+    },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.6.0",
         "dotenv": "^16.4.7",
-        "intuit-oauth": "^4.0.0",
+        "express": "^5.2.1",
         "node-quickbooks": "^2.0.43",
-        "open": "^9.1.0",
         "zod": "^3.24.2"
     },
     "devDependencies": {
         "@eslint/js": "^9.22.0",
         "@jest/globals": "^30.3.0",
+        "@types/express": "^5.0.6",
         "@types/jest": "^30.0.0",
         "@types/node": "^22.13.10",
+        "@types/supertest": "^7.2.0",
         "eslint": "^9.22.0",
         "eslint-config-prettier": "^10.1.1",
         "globals": "^16.0.0",
         "jest": "^30.2.0",
         "prettier": "3.5.3",
         "shx": "^0.3.4",
+        "supertest": "^7.2.2",
         "ts-jest": "^29.4.6",
         "typescript": "^5.8.2",
         "typescript-eslint": "^8.26.1"

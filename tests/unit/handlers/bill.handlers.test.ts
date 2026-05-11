@@ -35,6 +35,44 @@ describe('Bill Handlers', () => {
       expect(result.result).toEqual(mockBill);
     });
 
+    it('passes already-nested expense lines through unchanged', async () => {
+      let captured: any;
+      mockQuickBooksInstance.createBill.mockImplementation((payload: any, cb: any) => {
+        captured = payload;
+        cb(null, { Id: '2' });
+      });
+
+      const nestedLine = {
+        Amount: 100,
+        DetailType: 'AccountBasedExpenseLineDetail',
+        AccountBasedExpenseLineDetail: { AccountRef: { value: '5' } },
+      };
+      const result = await createQuickbooksBill({
+        Line: [nestedLine],
+        VendorRef: { value: '56' },
+      });
+
+      expect(result.isError).toBe(false);
+      expect(captured.Line[0]).toEqual(nestedLine);
+    });
+
+    it('passes lines without AccountRef or nested detail through unchanged', async () => {
+      let captured: any;
+      mockQuickBooksInstance.createBill.mockImplementation((payload: any, cb: any) => {
+        captured = payload;
+        cb(null, { Id: '3' });
+      });
+
+      const bareLine = { Amount: 50, Description: 'Misc' };
+      const result = await createQuickbooksBill({
+        Line: [bareLine],
+        VendorRef: { value: '56' },
+      });
+
+      expect(result.isError).toBe(false);
+      expect(captured.Line[0]).toEqual(bareLine);
+    });
+
     it('should handle API errors', async () => {
       mockQuickBooksInstance.createBill.mockImplementation((_payload: any, cb: any) =>
         cb(new Error('SAXParseException: Premature end of file'), null)

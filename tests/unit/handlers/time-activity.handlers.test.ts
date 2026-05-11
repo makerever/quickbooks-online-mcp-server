@@ -147,6 +147,24 @@ describe('TimeActivity Handlers', () => {
       expect(result.isError).toBe(false);
     });
 
+    it('should update a time activity with item_ref', async () => {
+      const mockUpdated = { Id: '123', ItemRef: { value: 'item-9' } };
+      let captured: any;
+      mockQuickBooksInstance.updateTimeActivity.mockImplementation((payload: any, cb: any) => {
+        captured = payload;
+        cb(null, mockUpdated);
+      });
+
+      const result = await updateQuickbooksTimeActivity({
+        id: '123',
+        sync_token: '0',
+        item_ref: 'item-9',
+      });
+
+      expect(result.isError).toBe(false);
+      expect(captured.ItemRef).toEqual({ value: 'item-9' });
+    });
+
     it('should handle API errors', async () => {
       mockQuickBooksInstance.updateTimeActivity.mockImplementation((payload: any, cb: any) =>
         cb(new Error('Update failed'), null)
